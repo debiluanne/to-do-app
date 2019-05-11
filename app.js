@@ -1,51 +1,47 @@
 function onReady() {
-  const ADD_TODO_FORM = document.getElementById('addToDoForm');
-  const NEW_TODO_TEXT = document.getElementById('newToDoText');
-  const TODO_LIST = document.getElementById('toDoList');
+  const toDos= [];
+  const addToDoForm = document.getElementById('addToDoForm');
 
-  addToDoForm.addEventListener('submit', event => {
-    event.preventDefault();
+function createNewToDo(){
+  const newToDoText = document.getElementById('newToDoText');
+  if (!newToDoText.value) { return; }
+
+  toDos.push({
+    title: newToDoText.value,
+    complete: false
+  });
+  newToDoText.value = '';
+
+  renderTheUI();
+}
+
+function renderTheUI(){
+  const toDoList = document.getElementById('toDoList');
+
+toDoList.textContent = '';
 
 
-    // get the text
-    let title = NEW_TODO_TEXT.value;
-
-    // create a new li
-    let newLi = document.createElement('li');
-
-    // create a new input
-    let checkbox = document.createElement('input');
-
-    // set the input's type to checkbox
+  toDos.forEach(function(toDo) {
+    const newLi = document.createElement('li');
+    const checkbox = document.createElement('input');
     checkbox.type = "checkbox";
 
-    // set the title
-    newLi.textContent = title;
+    newLi.textContent = toDo.title;
 
-    // attach the checkbox to the li
+    toDoList.appendChild(newLi);
     newLi.appendChild(checkbox);
-
-    //attach the li to the ul
-    TODO_LIST.appendChild(newLi);
-
-    // empty the input
-    NEW_TODO_TEXT.value = '';
-
-    // delete button
-    let deleteButton = document.createElement('button');
-    newLi.appendChild(deleteButton);
-    deleteButton.textContent = 'Delete';
-
-    deleteButton.addEventListener('click', function(event){
-      // this.parentElement represents the button's <li> parentElement
-      TODO_LIST.removeChild(this.parentElement);
-    });
-
-
   });
 }
 
+addToDoForm.addEventListener('submit', event => {
+  event.preventDefault();
+  createNewToDo();
+});
+
+renderTheUI();
+
+}
+
 window.onload = function() {
-  alert("The window has loaded!");
   onReady();
 }
